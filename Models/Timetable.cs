@@ -1,11 +1,12 @@
 using System.Text;
-using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 namespace SchoolManagementSystem.Models
 {
-    [Keyless]
+
     public class TimeTable
     {
         public string ClassId { get; set; }
+        [Key]
         public int TimeTableId { get; set; }
         public int TeacherId { get; set; }
         public int SessionNumber { get; set; }

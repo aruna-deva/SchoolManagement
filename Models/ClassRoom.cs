@@ -1,10 +1,11 @@
-using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 namespace SchoolManagementSystem.Models
 {
-    [Keyless]
+
     public class ClassRoom
     {
-        
+        [Key]
+        public int ClassroomId {get; set;}
         public string Standard { get; set; }
         public string  Section { get; set; }
     }

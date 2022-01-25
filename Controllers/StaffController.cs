@@ -12,14 +12,14 @@ using SchoolManagementSystem.Models;
 
 namespace SchoolManagement.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class StaffController : ControllerBase
     {
         SchoolManagementSystem.Infrastructure.IUserService _userService; 
         public StaffController(IUserService service)=> _userService=service;
-        [HttpPost("SignIn")]
-        public async Task<IActionResult> SignIn(User model)
+        [HttpPost("LogIn")]
+        public async Task<IActionResult> LogIn(User model)
         {
             //check whether all the properties are filled with values and
             //sent from the client side.All the required properties should
@@ -27,18 +27,25 @@ namespace SchoolManagement.Controllers
             if(!ModelState.IsValid)
                 return BadRequest();
             //invoke the authenticate method which will hit the DB and return bool status
-                var signInStatus=_userService.Authenticate(model);
-                if(signInStatus==false) //user does not exist
+                var LogInStatus=_userService.Authenticate(model);
+                if(LogInStatus==false) //user does not exist
                 {
                     return NotFound();
                 }
+                /*********CHANGES*******/
+                var role = _userService.GetUserRole(model.Id);
                 //build a claims identity and Sign the User as was done in the Login();
+                /*************** CHANGES TO THE CLAIMS ************************************
+                *  The claim types are updated to reflect the application requirements. 
+                * The first claim added is for the userName, 
+                * the second claim is for the ManeIdentifier or Id 
+                * the third claim is for the Role to which the user belongs.
+                ************************************************************************/
                  var claims=new List<Claim>
                 {
                 new Claim(ClaimTypes.Name, model.TypeName),
-                //new Claim(ClaimTypes.Role, model.StaffTypeId),
-                //new Claim("Passcode", users["user12"]),
-                new Claim(ClaimTypes.Role, "TypeId")
+                new Claim(ClaimTypes.NameIdentifier, model.Id.ToString()),
+                new Claim(ClaimTypes.Role, role.RoleName)
                 };
                 var claimsIdentity=new ClaimsIdentity(
                 claims: claims,
@@ -56,14 +63,14 @@ namespace SchoolManagement.Controllers
                 );
                 return Ok();
         }
-        [HttpGet("SignOut")]
-        new public async Task<IActionResult> SignOut() {
+        [HttpGet("LogOut")]
+        new public async Task<IActionResult> LogOut() {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return Ok();
         }
-        // static Dictionary<string, string> users=new Dictionary<string, string>
-        // {
-        //     {"user12","user12"},{"admin","admin"}
-        // };
+        static Dictionary<int, string> users=new Dictionary<int, string>
+        {
+            {1001, "Principal"},{1002, "Vice Principal"}
+        };
     }
 }

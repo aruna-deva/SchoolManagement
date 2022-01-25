@@ -1,8 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 
-//Folder: Models
-
-
 namespace SchoolManagementSystem.Models
 {
     
@@ -19,6 +16,16 @@ namespace SchoolManagementSystem.Models
             staffTypeId=this.StaffTypeId;
             typeName=this.TypeName;
         }
+    }
+    public class Role
+        {   
+           [Key] public int RoleId {get; set;}
+            public string RoleName {get; set;}
+        }
+    public enum RoleName
+        {
+            Principal,
+            VicePrincipal
+        }
 
     }
-}

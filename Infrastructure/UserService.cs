@@ -1,10 +1,13 @@
 using SchoolManagementSystem.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace SchoolManagementSystem.Infrastructure
 {
     public interface IUserService
     {
         bool Authenticate(User item);
+        Role GetUserRole(int id);
         List<User> GetAll();
         User GetDetails(int id);
     }
@@ -22,9 +25,24 @@ namespace SchoolManagementSystem.Infrastructure
                     c.TypeName.Equals(item.TypeName)
             );
             if(obj !=null)
+            {
+                item.Id=obj.Id;
+            
                 return true;
+            }
             else 
                 return false;
+        }
+        public Role GetUserRole(int id)
+        {
+          var roles = _context.Roles.FromSqlRaw(
+                $"SELECT RoleId, RoleName FROM Roles WHERE RoleId IN " + 
+                $" (SELECT RoleID FROM UserRoles WHERE UserId={id})"
+            );
+            if(roles.Count()==0)
+            return null; 
+            else 
+            return roles.First();  
         }
         public List<User> GetAll()
         {

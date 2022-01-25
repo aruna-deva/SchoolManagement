@@ -14,6 +14,7 @@ namespace SchoolManagementSystem.Infrastructure
         public DbSet<TeachingStaffDetail> TeachingStaffDetails {get; set;}
         public DbSet<Staffclassification> Staffclassifications {get; set;}
         public DbSet<User> Users {get; set;}
+        public DbSet<Role> Roles {get; set;}
     }
 
 }
