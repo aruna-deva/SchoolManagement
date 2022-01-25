@@ -9,10 +9,11 @@ namespace SchoolManagementSystem.Infrastructure
         
 
         public DbSet<StudentDetail> StudentDetails {get; set;}
-        public DbSet<TimeTables> TimeTable {get; set;}
+        public DbSet<TimeTable> Timetable {get; set;}
         public DbSet<ClassRoom> Classroom {get; set;}
         public DbSet<TeachingStaffDetail> TeachingStaffDetails {get; set;}
         public DbSet<Staffclassification> Staffclassifications {get; set;}
+        public DbSet<User> Users {get; set;}
     }
 
 }
