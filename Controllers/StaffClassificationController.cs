@@ -13,44 +13,79 @@ namespace SchoolManagement.Controllers
     [ApiController]
     public class StaffClassificationController : ControllerBase
     {
-         ICRUDRepository<Staffclassification, int> _repository;
-        public StaffClassificationController(ICRUDRepository<Staffclassification, int> 
-        repository) =>_repository=repository;
+        ICRUDRepository<Staffclassification, int> _repository;
+        public StaffClassificationController(ICRUDRepository<Staffclassification, int>
+        repository) => _repository = repository;
         public ActionResult<IEnumerable<Staffclassification>> Get()
         {
-            var items = _repository.GetAll();
-            return items.ToList();
+            try
+            {
+                var items = _repository.GetAll();
+                return items.ToList();
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+
         }
         [HttpGet("{id}")]
         public ActionResult<Staffclassification> GetDetails(int id)
         {
-             var item=_repository.GetDetails(id);
-             if(item==null)
-                return NotFound();
+            try
+            {
+                var item = _repository.GetDetails(id);
+                if (item == null)
+                    return NotFound();
                 return item;
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
         [HttpPost("scladdnew")]
         public ActionResult<Staffclassification> Create(Staffclassification scl)
         {
-            if(scl==null)
+            if (scl == null)
                 return BadRequest();
-            
-            _repository.Create(scl);
-            return scl;
+            try
+            {
+                _repository.Create(scl);
+                return scl;
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
         [HttpPut("sclupdate/{id}")]
         public ActionResult<Staffclassification> Update(int id, Staffclassification scl)
         {
-            if(scl==null)
+            if (scl == null)
                 return BadRequest();
-            _repository.Update(scl);
-            return scl;
+            try
+            {
+                _repository.Update(scl);
+                return scl;
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
         [HttpDelete("sclremove/{id}")]
         public ActionResult Delete(int id)
         {
-            _repository.Delete(id);
-            return Ok();
+            try
+            {
+                _repository.Delete(id);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
     }
 }

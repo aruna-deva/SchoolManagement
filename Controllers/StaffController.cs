@@ -38,7 +38,7 @@ namespace SchoolManagement.Controllers
                 /*************** CHANGES TO THE CLAIMS ************************************
                 *  The claim types are updated to reflect the application requirements. 
                 * The first claim added is for the userName, 
-                * the second claim is for the ManeIdentifier or Id 
+                * the second claim is for the NameIdentifier or Id 
                 * the third claim is for the Role to which the user belongs.
                 ************************************************************************/
                  var claims=new List<Claim>

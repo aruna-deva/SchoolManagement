@@ -17,39 +17,61 @@ namespace SchoolManagement.Controllers
         public ClassRoomController(ICRUDRepository<ClassRoom, string> repository ) => _repository = repository;
         public ActionResult<IEnumerable<ClassRoom>> Get()
         {
-            var items = _repository.GetAll();
+            try{
+                var items = _repository.GetAll();
             return items.ToList();
+            } catch(Exception e)
+            {
+                throw;
+            }
         }  
         [HttpGet("{Standard}")]
         public ActionResult<ClassRoom> GetDetails(string standard)
         {
-            var item = _repository.GetDetails(standard);
+            try{
+                var item = _repository.GetDetails(standard);
             if( item==null)
                 return NotFound();
-            return item;    
+            return item;   }
+            catch(Exception e)
+            {
+                throw;
+            } 
         }
         [HttpPost("clsaddnew")]
         public ActionResult<ClassRoom> Create(ClassRoom cls)
         {
             if(cls==null)
                 return BadRequest();
-            
+            try {
             _repository.Create(cls);
-            return cls;
+            return cls; }
+            catch(Exception e){
+            throw ;
+            }
         }
-        [HttpPut("clsupdate/{id}")]
+        [HttpPut("clsupdate/{Standard}")]
         public ActionResult<ClassRoom> Update(string standard, ClassRoom cls)
         {
             if(cls==null)
                 return BadRequest();
+            try{
             _repository.Update(cls);
-            return cls;
+            return cls;}
+            catch(Exception e)
+            {
+                throw;
+            }
         }
-        [HttpDelete("clsremove/{id}")]
+        [HttpDelete("clsremove/{Standard}")]
         public ActionResult Delete(string standard)
         {
-            _repository.Delete(standard);
-            return Ok();
+           try { _repository.Delete(standard);
+            return Ok(); }
+            catch(Exception e)
+            {
+                throw;
+            }
         }
     }
 }

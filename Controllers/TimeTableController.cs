@@ -38,39 +38,79 @@ namespace SchoolManagement.Controllers
             }
             //end of the code inclusion. 
             if(UserId==0) return BadRequest();
+            try{
             var items = _repository.GetAll();
-            return items.ToList();
+            return items.ToList(); }
+            catch(Exception e)
+            {
+                throw;
+            }
         }  
+        [Microsoft.AspNetCore.Authorization.Authorize()]
+
         [HttpGet("{id}")]
         public ActionResult<TimeTable> GetDetails(string id)
-        {
-            var item = _repository.GetDetails(id);
+        { 
+            TypeName = HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+            UserId = Convert.ToInt32("0" + HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var role = Convert.ToString(HttpContext.User.FindFirst(ClaimTypes.Role).Value);
+            if(role.ToLower()!="principal" &&
+            role.ToLower()!="viceprincipal") {
+                return Unauthorized();
+            }
+            try{var item = _repository.GetDetails(id);
             if( item==null )
                 return NotFound();
-            return item;    
+            return item;    }
+            catch(Exception e)
+            { 
+                throw;
+            }
         } 
+        
+        [Microsoft.AspNetCore.Authorization.Authorize()]
+
         [HttpPost("ttaddnew")]
         public ActionResult<TimeTable> Create(TimeTable tt)
         {
+            TypeName = HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+            UserId = Convert.ToInt32("0" + HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var role = Convert.ToString(HttpContext.User.FindFirst(ClaimTypes.Role).Value);
+            if(role.ToLower()!="principal" &&
+            role.ToLower()!="viceprincipal") {
+                return Unauthorized();
+            }
             if(tt==null)
                 return BadRequest();
-            
+            try{
             _repository.Create(tt);
-            return tt;
+            return tt; }
+            catch(Exception e)
+            {
+                throw;
+            }
         }
         [HttpPut("ttupdate/{id}")]
         public ActionResult<TimeTable> Update(string id, TimeTable tt)
         {
             if(tt==null)
                 return BadRequest();
-            _repository.Update(tt);
-            return tt;
+           try{ _repository.Update(tt);
+            return tt; }
+            catch(Exception e)
+            {
+                throw;
+            }
         }
         [HttpDelete("ttremove/{id}")]
         public ActionResult Delete(string id)
         {
-            _repository.Delete(id);
-            return Ok();
+          try{  _repository.Delete(id);
+            return Ok(); }
+            catch(Exception e)
+            {
+                throw;
+            }
         }
     }
 }

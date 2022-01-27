@@ -19,39 +19,59 @@ namespace SchoolManagement.Controllers
         ) =>_repository = repository;
         public ActionResult<IEnumerable<StudentDetail>> Get()
         {
-            var items = _repository.GetAll();
-            return items.ToList();
+           try { var items = _repository.GetAll();
+            return items.ToList(); }
+            catch(Exception e)
+            {
+                throw;
+            }
         }
         [HttpGet("{id}")]
         public ActionResult<StudentDetail> GetDetails(int id)
         {
-            var item = _repository.GetDetails(id);
+           try{ var item = _repository.GetDetails(id);
             if(item==null)
                return NotFound();
-            return item;
+            return item; }
+            catch(Exception e)
+            {
+                throw;
+            }
         }
          [HttpPost("addnew")]
         public ActionResult<StudentDetail> Create(StudentDetail std)
         {
             if(std==null)
                 return BadRequest();
-            
+            try{
             _repository.Create(std);
-            return std;
+            return std; }
+            catch(Exception e)
+            {
+                throw;
+            }
         }
         [HttpPut("update/{id}")]
         public ActionResult<StudentDetail> Update(int id, StudentDetail std)
         {
             if(std==null)
                 return BadRequest();
-            _repository.Update(std);
-            return std;
+           try{ _repository.Update(std);
+            return std; }
+            catch(Exception e)
+            {
+                throw;
+            }
         }
         [HttpDelete("remove/{id}")]
         public ActionResult Delete(int id)
         {
-            _repository.Delete(id);
-            return Ok();
+           try{ _repository.Delete(id);
+            return Ok(); }
+            catch(Exception e)
+            {
+                throw;
+            }
         }
 
     }
